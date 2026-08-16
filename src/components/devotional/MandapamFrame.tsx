@@ -34,13 +34,13 @@ export const MandapamFrame: React.FC<MandapamFrameProps> = ({
     { id: 'mandapam', label: 'Mandapam', icon: '🏠' },
     { id: 'offerings', label: 'Offerings', icon: '💰' },
     { id: 'expenses', label: 'Expenses', icon: '🪔' },
-    { id: 'payments', label: 'Vendor Payments', icon: '💳' },
+    { id: 'payments', label: 'Payments', icon: '💳' },
     { id: 'budget', label: 'Budget', icon: '🎯' },
     { id: 'reports', label: 'Reports', icon: '📊' },
     { id: 'gallery', label: 'Gallery', icon: '🖼' },
-    { id: 'committee', label: 'Committee Roster', icon: '👨‍👩‍👧' },
+    { id: 'committee', label: 'Committee', icon: '👨‍👩‍👧' },
     { id: 'appearance', label: 'Appearance', icon: '🎨' },
-    { id: 'settings', label: 'Event Settings', icon: '⚙' },
+    { id: 'settings', label: 'Settings', icon: '⚙' },
     { id: 'audit-logs', label: 'Audit Logs', icon: '🔐' },
   ];
 
@@ -48,12 +48,24 @@ export const MandapamFrame: React.FC<MandapamFrameProps> = ({
     { id: 'mandapam', label: 'Mandapam', icon: '🏠' },
     { id: 'offerings', label: 'Offerings', icon: '💰' },
     { id: 'expenses', label: 'Expenses', icon: '🪔' },
-    { id: 'payments', label: 'Vendor Payments', icon: '💳' },
+    { id: 'payments', label: 'Payments', icon: '💳' },
     { id: 'reports', label: 'Reports', icon: '📊' },
     { id: 'gallery', label: 'Gallery', icon: '🖼' },
   ];
 
   const navItems = isAdmin ? adminNavItems : committeeNavItems;
+
+  // Deduplicated mobile navigation tabs (Max 6 distinct items)
+  const mobileNavItems: { id: NavTab; label: string; icon: string }[] = isAdmin
+    ? [
+        { id: 'mandapam', label: 'Mandapam', icon: '🏠' },
+        { id: 'offerings', label: 'Offerings', icon: '💰' },
+        { id: 'expenses', label: 'Expenses', icon: '🪔' },
+        { id: 'payments', label: 'Payments', icon: '💳' },
+        { id: 'reports', label: 'Reports', icon: '📊' },
+        { id: 'gallery', label: 'Gallery', icon: '🖼' },
+      ]
+    : committeeNavItems;
 
   return (
     <div className="min-h-screen flex flex-col bg-transparent text-slate-800 dark:text-amber-50">
@@ -91,19 +103,11 @@ export const MandapamFrame: React.FC<MandapamFrameProps> = ({
           </nav>
 
           {user && (
-            <div className="pt-3 border-t border-gold-500/30 flex items-center justify-between text-xs">
-              <div className="truncate">
-                <p className="font-semibold text-amber-200 truncate">{user.name}</p>
-                <span className="inline-block px-1.5 py-0.5 text-[9px] rounded bg-gold-500/20 text-gold-300 font-mono">
-                  {user.role}
-                </span>
-              </div>
-              <button
-                onClick={logout}
-                className="text-[10px] text-saffron-400 hover:underline shrink-0"
-              >
-                Logout
-              </button>
+            <div className="pt-3 border-t border-gold-500/30 text-xs">
+              <p className="font-semibold text-amber-200 truncate">{user.name}</p>
+              <span className="inline-block px-1.5 py-0.5 text-[9px] rounded bg-gold-500/20 text-gold-300 font-mono mt-0.5">
+                {user.role}
+              </span>
             </div>
           )}
         </aside>
@@ -115,13 +119,13 @@ export const MandapamFrame: React.FC<MandapamFrameProps> = ({
       {/* Mobile Devotional Bottom Navigation Bar */}
       <div className="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-maroon-950/95 backdrop-blur-md border-t border-gold-500/40 text-amber-200 px-2 py-1 shadow-mandapam">
         <div className="flex items-center justify-around overflow-x-auto py-1 space-x-1">
-          {navItems.slice(0, 5).map((item) => {
+          {mobileNavItems.map((item) => {
             const isActive = activeTab === item.id;
             return (
               <button
                 key={item.id}
                 onClick={() => setActiveTab(item.id)}
-                className={`flex flex-col items-center px-2 py-1 rounded-lg text-[10px] min-w-[56px] transition ${
+                className={`flex flex-col items-center px-2 py-1 rounded-lg text-[10px] min-w-[50px] transition ${
                   isActive
                     ? 'text-gold-400 font-bold bg-maroon-800/80 border border-gold-500/30'
                     : 'text-amber-200/70'
@@ -132,15 +136,16 @@ export const MandapamFrame: React.FC<MandapamFrameProps> = ({
               </button>
             );
           })}
-          <button
-            onClick={() => setActiveTab('reports')}
-            className={`flex flex-col items-center px-2 py-1 rounded-lg text-[10px] min-w-[56px] transition ${
-              activeTab === 'reports' ? 'text-gold-400 font-bold bg-maroon-800/80 border border-gold-500/30' : 'text-amber-200/70'
-            }`}
-          >
-            <span className="text-base leading-none mb-0.5">📊</span>
-            <span>Reports</span>
-          </button>
+          {user && (
+            <button
+              onClick={logout}
+              className="flex flex-col items-center px-2 py-1 rounded-lg text-[10px] min-w-[50px] text-red-400 font-bold hover:bg-red-500/20 transition"
+              title="Logout"
+            >
+              <span className="text-base leading-none mb-0.5">🚪</span>
+              <span>Logout</span>
+            </button>
+          )}
         </div>
       </div>
     </div>

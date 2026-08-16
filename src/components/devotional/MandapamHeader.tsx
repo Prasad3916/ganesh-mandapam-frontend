@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useTheme } from '../../context/ThemeContext';
+import { useAuth } from '../../context/AuthContext';
 import { GaneshIcon } from './GaneshIcon';
 import { soundService } from '../../services/soundService';
-import { Moon, Sun, Sparkles, Volume2, VolumeX, Plus, FileText } from 'lucide-react';
+import { Moon, Sun, Sparkles, Volume2, VolumeX, Plus, FileText, LogOut, User as UserIcon } from 'lucide-react';
 
 interface MandapamHeaderProps {
   onOpenOfferingModal: () => void;
@@ -16,6 +17,7 @@ export const MandapamHeader: React.FC<MandapamHeaderProps> = ({
   onNavigateToReports,
 }) => {
   const { isDarkMode, toggleDarkMode, isFestivalMode, toggleFestivalMode } = useTheme();
+  const { user, logout } = useAuth();
   const [isAudioOn, setIsAudioOn] = useState(false);
 
   // Live Countdown
@@ -86,44 +88,24 @@ export const MandapamHeader: React.FC<MandapamHeaderProps> = ({
           </div>
         </div>
 
-        {/* Control Toggles & Quick Actions */}
+        {/* Control Toggles, User Profile & Logout Button */}
         <div className="flex items-center flex-wrap justify-center gap-2">
-          <button
-            onClick={onOpenOfferingModal}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-saffron-500 hover:bg-saffron-600 text-white text-xs font-bold rounded-lg transition transform hover:-translate-y-0.5"
-          >
-            <Plus className="w-4 h-4" />
-            <span>+ Offering</span>
-          </button>
+          {/* Active Logged-in User Badge */}
+          {user && (
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-maroon-950/80 border border-gold-500/40 text-xs shadow-sm">
+              <UserIcon className="w-4 h-4 text-gold-400" />
+              <div className="text-left">
+                <span className="font-bold text-amber-100 block max-w-[120px] sm:max-w-[160px] truncate leading-tight">
+                  {user.name}
+                </span>
+                <span className="text-[9px] text-gold-300/80 font-mono block leading-none">
+                  {user.role === 'ADMIN' ? 'Admin' : 'Committee Member'}
+                </span>
+              </div>
+            </div>
+          )}
 
-          <button
-            onClick={onOpenExpenseModal}
-            className="flex items-center gap-1.5 px-3 py-1.5 bg-maroon-700 hover:bg-maroon-600 border border-gold-500/40 text-gold-300 text-xs font-bold rounded-lg transition"
-          >
-            <Plus className="w-4 h-4" />
-            <span>+ Expense</span>
-          </button>
 
-          <button
-            onClick={onNavigateToReports}
-            className="p-1.5 bg-maroon-950/60 hover:bg-maroon-900 border border-gold-500/30 rounded-lg text-amber-300 transition"
-            title="Reports"
-          >
-            <FileText className="w-4 h-4" />
-          </button>
-
-          <button
-            onClick={toggleFestivalMode}
-            className={`p-1.5 rounded-lg border text-xs font-medium flex items-center gap-1 transition ${
-              isFestivalMode
-                ? 'bg-amber-500/20 border-gold-400 text-gold-300'
-                : 'bg-maroon-950/60 border-maroon-700 text-slate-400'
-            }`}
-            title="Toggle Festival Mode"
-          >
-            <Sparkles className="w-4 h-4 text-gold-400" />
-            <span className="hidden sm:inline">{isFestivalMode ? 'Devotional Mode' : 'Pro'}</span>
-          </button>
 
           <button
             onClick={handleToggleAudio}
@@ -144,6 +126,18 @@ export const MandapamHeader: React.FC<MandapamHeaderProps> = ({
           >
             {isDarkMode ? <Sun className="w-4 h-4 text-gold-400" /> : <Moon className="w-4 h-4 text-amber-200" />}
           </button>
+
+          {/* Prominent Logout Button */}
+          {user && (
+            <button
+              onClick={logout}
+              className="flex items-center gap-1 px-3 py-1.5 bg-red-600/30 hover:bg-red-600 border border-red-500/40 text-red-200 text-xs font-bold rounded-lg transition"
+              title="Sign Out of Mandapam"
+            >
+              <LogOut className="w-4 h-4" />
+              <span>Logout</span>
+            </button>
+          )}
         </div>
       </div>
     </header>

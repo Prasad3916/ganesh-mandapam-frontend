@@ -10,7 +10,6 @@ interface LandingPageProps {
 
 export const LandingPage: React.FC<LandingPageProps> = ({
   onEnterMandapam,
-  onViewFinances,
 }) => {
   return (
     <div className="min-h-screen bg-temple-dark text-amber-50 relative overflow-hidden flex flex-col justify-between">
@@ -25,18 +24,12 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             Bala Ganapathi Seva Samithi
           </span>
         </div>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={onViewFinances}
-            className="px-4 py-2 rounded-xl bg-maroon-900/80 hover:bg-maroon-800 border border-gold-500/40 text-gold-300 font-semibold text-xs transition"
-          >
-            Public Audit
-          </button>
+        <div>
           <button
             onClick={onEnterMandapam}
-            className="px-5 py-2 rounded-xl bg-saffron-500 hover:bg-saffron-600 text-white font-bold text-xs shadow-saffron-glow transition transform hover:-translate-y-0.5"
+            className="px-5 py-2.5 rounded-xl bg-saffron-500 hover:bg-saffron-600 text-white font-bold text-xs shadow-saffron-glow transition transform hover:-translate-y-0.5"
           >
-            Enter Mandapam
+            Enter Digital Mandapam
           </button>
         </div>
       </header>
@@ -73,7 +66,7 @@ export const LandingPage: React.FC<LandingPageProps> = ({
             Bala Ganapathi Seva Samithi
           </h2>
           <p className="text-sm sm:text-base text-amber-200/90 max-w-2xl mx-auto font-sans leading-relaxed">
-            The Digital Mandapam Platform combining Ganesh Chaturthi devotional celebrations with transparent, backend-authoritative financial management.
+            The Digital Mandapam Platform combining Ganesh Chaturthi devotional celebrations with transparent financial management.
           </p>
         </motion.div>
 
